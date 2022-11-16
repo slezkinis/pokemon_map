@@ -79,6 +79,8 @@ def show_pokemon(request, pokemon_id):
         'title_ru': requested_pokemon.title,
         'pokemon_id': requested_pokemon.id,
         'description': pokemon.description,
+        'title_en': pokemon.title_en,
+        'title_jp': pokemon.title_jp,
     }
     for pokemon_entity in pokemon_entities:
         add_pokemon(
