@@ -72,38 +72,43 @@ def show_pokemon(request, pokemon_id):
     pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon)
     now_time = now()
     pokemon_entities = PokemonEntity.objects.filter(appeared_at__lte=now_time, disappeared_at__gte=now_time)
+    about_previous_evolution = {}
+    about_next_evolution = {}
+    print(requested_pokemon)
     if requested_pokemon.previous_evolution:
-        about_pokemon = {
+        about_previous_evolution = {
+            'title_ru': requested_pokemon.previous_evolution.title,
             'img_url': request.build_absolute_uri(
-                requested_pokemon.photo.url
+                requested_pokemon.previous_evolution.photo.url
             ),
-            'title_ru': requested_pokemon.title,
-            'pokemon_id': requested_pokemon.id,
-            'description': requested_pokemon.description,
-            'title_en': requested_pokemon.title_en,
-            'title_jp': requested_pokemon.title_jp,
-            'previous_evolution':{
-                'title_ru': requested_pokemon.previous_evolution.title,
-                'img_url': request.build_absolute_uri(
-                    requested_pokemon.previous_evolution.photo.url
-                ),
-                'pokemon_id': requested_pokemon.previous_evolution.id,
-                'description': requested_pokemon.previous_evolution.description,
-                'title_en': requested_pokemon.previous_evolution.title_en,
-                'title_jp': requested_pokemon.previous_evolution.title_jp,
-            }
+            'pokemon_id': requested_pokemon.previous_evolution.id,
+            'description': requested_pokemon.previous_evolution.description,
+            'title_en': requested_pokemon.previous_evolution.title_en,
+            'title_jp': requested_pokemon.previous_evolution.title_jp,
         }
-    else:
-        about_pokemon = {
+    if requested_pokemon.next_evolutions.count() != 0:
+        about_next_evolution = {
+            'title_ru': requested_pokemon.next_evolutions.all()[0].title,
             'img_url': request.build_absolute_uri(
-                requested_pokemon.photo.url
+                requested_pokemon.next_evolutions.all()[0].photo.url
             ),
-            'title_ru': requested_pokemon.title,
-            'pokemon_id': requested_pokemon.id,
-            'description': requested_pokemon.description,
-            'title_en': requested_pokemon.title_en,
-            'title_jp': requested_pokemon.title_jp,
+            'pokemon_id': requested_pokemon.next_evolutions.all()[0].id,
+            'description': requested_pokemon.next_evolutions.all()[0].description,
+            'title_en': requested_pokemon.next_evolutions.all()[0].title_en,
+            'title_jp': requested_pokemon.next_evolutions.all()[0].title_jp,
         }
+    about_pokemon = {
+        'img_url': request.build_absolute_uri(
+            requested_pokemon.photo.url
+        ),
+        'title_ru': requested_pokemon.title,
+        'pokemon_id': requested_pokemon.id,
+        'description': requested_pokemon.description,
+        'title_en': requested_pokemon.title_en,
+        'title_jp': requested_pokemon.title_jp,
+        'next_evolution': about_next_evolution,
+        'previous_evolution': about_previous_evolution,
+    }
     for pokemon_entity in pokemon_entities:
         add_pokemon(
             folium_map, pokemon_entity.lat,
