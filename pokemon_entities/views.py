@@ -72,16 +72,38 @@ def show_pokemon(request, pokemon_id):
     pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon)
     now_time = now()
     pokemon_entities = PokemonEntity.objects.filter(appeared_at__lte=now_time, disappeared_at__gte=now_time)
-    about_pokemon = {
-        'img_url': request.build_absolute_uri(
-            requested_pokemon.photo.url
-        ),
-        'title_ru': requested_pokemon.title,
-        'pokemon_id': requested_pokemon.id,
-        'description': pokemon.description,
-        'title_en': pokemon.title_en,
-        'title_jp': pokemon.title_jp,
-    }
+    if requested_pokemon.previous_evolution:
+        about_pokemon = {
+            'img_url': request.build_absolute_uri(
+                requested_pokemon.photo.url
+            ),
+            'title_ru': requested_pokemon.title,
+            'pokemon_id': requested_pokemon.id,
+            'description': requested_pokemon.description,
+            'title_en': requested_pokemon.title_en,
+            'title_jp': requested_pokemon.title_jp,
+            'previous_evolution':{
+                'title_ru': requested_pokemon.previous_evolution.title,
+                'img_url': request.build_absolute_uri(
+                    requested_pokemon.previous_evolution.photo.url
+                ),
+                'pokemon_id': requested_pokemon.previous_evolution.id,
+                'description': requested_pokemon.previous_evolution.description,
+                'title_en': requested_pokemon.previous_evolution.title_en,
+                'title_jp': requested_pokemon.previous_evolution.title_jp,
+            }
+        }
+    else:
+        about_pokemon = {
+            'img_url': request.build_absolute_uri(
+                requested_pokemon.photo.url
+            ),
+            'title_ru': requested_pokemon.title,
+            'pokemon_id': requested_pokemon.id,
+            'description': requested_pokemon.description,
+            'title_en': requested_pokemon.title_en,
+            'title_jp': requested_pokemon.title_jp,
+        }
     for pokemon_entity in pokemon_entities:
         add_pokemon(
             folium_map, pokemon_entity.lat,
