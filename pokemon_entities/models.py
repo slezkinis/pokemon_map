@@ -12,7 +12,7 @@ class Pokemon(models.Model):
         blank=True, 
         related_name='next_evolutions',
     )
-    description = models.CharField(verbose_name='Описание покемона', blank=True, max_length=1000)
+    description = models.TextField(verbose_name='Описание покемона', blank=True)
     title_en = models.CharField(verbose_name='Имя покемона на английском', blank=True, max_length=200)
     title_jp = models.CharField(verbose_name='Имя покемона на японском', max_length=200, blank=True)
 
