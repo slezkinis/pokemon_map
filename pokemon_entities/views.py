@@ -58,8 +58,6 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    # with open('pokemon_entities/pokemons.json', encoding='utf-8') as database:
-    #     pokemons = json.load(database)['pokemons']
     pokemons = Pokemon.objects.all()
     for pokemon in pokemons:
         if pokemon.id == int(pokemon_id):
