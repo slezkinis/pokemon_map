@@ -60,9 +60,8 @@ def show_all_pokemons(request):
 def show_pokemon(request, pokemon_id):
     requested_pokemon = Pokemon.objects.get(id=pokemon_id)
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon)
     now_time = now()
-    pokemon_entities = PokemonEntity.objects.filter(appeared_at__lte=now_time, disappeared_at__gte=now_time)
+    pokemon_entities = requested_pokemon.entities.filter(appeared_at__lte=now_time, disappeared_at__gte=now_time)
     about_previous_evolution = {}
     about_next_evolution = {}
     if requested_pokemon.previous_evolution:
