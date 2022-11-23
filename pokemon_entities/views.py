@@ -65,7 +65,6 @@ def show_pokemon(request, pokemon_id):
     pokemon_entities = PokemonEntity.objects.filter(appeared_at__lte=now_time, disappeared_at__gte=now_time)
     about_previous_evolution = {}
     about_next_evolution = {}
-    print(requested_pokemon)
     if requested_pokemon.previous_evolution:
         about_previous_evolution = {
             'title_ru': requested_pokemon.previous_evolution.title,
